@@ -393,11 +393,11 @@ class Procedure(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -415,11 +415,11 @@ class Relation(Query):
         """
         return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_to(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -437,11 +437,11 @@ class Relation(Query):
         """
         return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_from(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
         :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -484,7 +484,10 @@ class Relation(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
 
-        relation_type = '' if label is None else f': {label}'
+        if isinstance(label, list):
+            relation_type = "|".join([f':{l}' for l in label])
+        else:
+            relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
         if min_hops == 1 and max_hops == 1:
@@ -603,7 +606,10 @@ class RelationAfterMerge(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
 
-        relation_type = '' if label is None else f': {label}'
+        if isinstance(label, list):
+            relation_type = "|".join([f':{l}' for l in label])
+        else:
+            relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
         if min_hops == 1 and max_hops == 1:

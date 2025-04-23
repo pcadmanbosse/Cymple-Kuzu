@@ -6,7 +6,7 @@
       "docstring_summary": "Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.",
       "args": {
         "label": {
-          "type": "str",
+          "type": "Union[str, List[str]]",
           "default": "None",
           "description": "The relationship label (type) in the DB"
         },
@@ -40,7 +40,7 @@
       "docstring_summary": "Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.",
       "args": {
         "label": {
-          "type": "str",
+          "type": "Union[str, List[str]]",
           "default": "None",
           "description": "The relationship label (type) in the DB"
         },
@@ -74,7 +74,7 @@
       "docstring_summary": "Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.",
       "args": {
         "label": {
-          "type": "str",
+          "type": "Union[str, List[str]]",
           "default": "None",
           "description": "The relationship label (type) in the DB"
         },
