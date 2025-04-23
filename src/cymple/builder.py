@@ -393,10 +393,10 @@ class Procedure(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
+        :param label: The relationship label (type or types) in the DB, defaults to None
         :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -407,18 +407,21 @@ class Relation(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_to(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_to(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
+        :param label: The relationship label (type or types) in the DB, defaults to None
         :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -429,18 +432,21 @@ class Relation(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_from(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_from(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
+        :param label: The relationship label (type or types) in the DB, defaults to None
         :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -451,21 +457,24 @@ class Relation(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def _directed_relation(self, direction: str, label: Union[str, List[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
         :type direction: str
-        :param label: The relationship label (type) in the DB
-        :type label: str
+        :param label: The relationship label (type or types) in the DB
+        :type label: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -475,6 +484,9 @@ class Relation(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
@@ -490,6 +502,7 @@ class Relation(Query):
             relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
+
         if min_hops == 1 and max_hops == 1:
             relation_length = ''
         elif min_hops == -1 and max_hops == -1:
@@ -498,6 +511,9 @@ class Relation(Query):
             relation_length = f'*{min_hops_str}'
         else:
             relation_length = f'*{min_hops_str}..{max_hops_str}'
+
+        if shortest and not (min_hops == 1 and max_hops == 1):
+            relation_length += " SHORTEST "
 
         if relation_ref_name or relation_type or relation_length or relation_properties:
             relation_str = f'[{relation_ref_name}{relation_type}{relation_length}{relation_properties}]'
@@ -515,11 +531,11 @@ class Relation(Query):
 class RelationAfterMerge(Query):
     """A class for representing a "RELATION AFTER MERGE" clause."""
 
-    def related(self, label: str = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :param label: The relationship label (type or types) in the DB, defaults to None
+        :type label: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -529,19 +545,22 @@ class RelationAfterMerge(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_to(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_to(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :param label: The relationship label (type or types) in the DB, defaults to None
+        :type label: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -551,19 +570,22 @@ class RelationAfterMerge(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_from(self, label: str = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def related_from(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
 
-        :param label: The relationship label (type) in the DB, defaults to None
-        :type label: str
+        :param label: The relationship label (type or types) in the DB, defaults to None
+        :type label: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -573,21 +595,24 @@ class RelationAfterMerge(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def _directed_relation(self, direction: str, label: str, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, **kwargs):
+    def _directed_relation(self, direction: str, label: Union[str, list[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: bool = False, **kwargs):
         """Concatenate a graph Relationship (private method).
 
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
         :type direction: str
-        :param label: The relationship label (type) in the DB
-        :type label: str
+        :param label: The relationship label (type or types) in the DB
+        :type label: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -597,6 +622,9 @@ class RelationAfterMerge(Query):
         :type min_hops: int
         :param max_hops: The maximal desired number of hops (set -1 for minimal boundary only), defaults to 1
         :type max_hops: int
+        :param shortest: Whether to add the SHORTEST flag to a recursive relationship. Requires min_hops | max_hops.,
+            defaults to False
+        :type shortest: bool
         :param **kwargs: kwargs
         :type **kwargs
 
@@ -612,6 +640,7 @@ class RelationAfterMerge(Query):
             relation_type = '' if label is None else f': {label}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
+
         if min_hops == 1 and max_hops == 1:
             relation_length = ''
         elif min_hops == -1 and max_hops == -1:
@@ -620,6 +649,9 @@ class RelationAfterMerge(Query):
             relation_length = f'*{min_hops_str}'
         else:
             relation_length = f'*{min_hops_str}..{max_hops_str}'
+
+        if shortest and not (min_hops == 1 and max_hops == 1):
+            relation_length += " SHORTEST "
 
         if relation_ref_name or relation_type or relation_length or relation_properties:
             relation_str = f'[{relation_ref_name}{relation_type}{relation_length}{relation_properties}]'
