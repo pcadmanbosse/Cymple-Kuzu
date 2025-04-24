@@ -1,7 +1,7 @@
 {
     "clause_name": "Drop Column",
     "successors": [
-        "QueryStartAvailable"
+        "NewQuery"
     ],
     "methods": [
         {

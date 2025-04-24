@@ -74,7 +74,8 @@ rendered = {
     'CASE (simple extended)': qb.match().node(ref_name="n", labels="Person").return_literal("n.name,").case(when_then_mapping={"'Unknown'": ["IS NULL", "IS NOT TYPED INTEGER | FLOAT"], "'Baby'": ["= 0", "= 1", "= 2"], "'Child'": "<= 13", "'Teenager'": "< 20", "'Young Adult'": "< 30", "'Immortal'": "> 1000"}, default_result="'Adult'", test_expression="n.age", results_ref="result"),
     'CASE (generic)': qb.match().node(ref_name="n", labels="Person").return_literal().case(when_then_mapping={"1": "n.eyes = 'blue'", "2": "n.age < 40"}, default_result="3", results_ref="result, n.eyes, n.age"),
     'CASE (null values)': qb.match().node(ref_name="n", labels="Person").return_literal("n.name,").case(when_then_mapping={"-1": "n.age IS NULL"}, default_result="n.age - 10", results_ref="age_10_years_ago"),
-    'CASE (with set)': qb.match().node(ref_name="n", labels="Person").with_("n,").case(when_then_mapping={"1": "'blue'", "2": "'brown'"}, default_result="3", results_ref="colorCode", test_expression="n.eyes").set({"n.colorCode": "colorCode"}, escape_values=False).return_literal("n.name, n.colorCode")
+    'CASE (with set)': qb.match().node(ref_name="n", labels="Person").with_("n,").case(when_then_mapping={"1": "'blue'", "2": "'brown'"}, default_result="3", results_ref="colorCode", test_expression="n.eyes").set({"n.colorCode": "colorCode"}, escape_values=False).return_literal("n.name, n.colorCode"),
+    'New Query': qb.reset().alter().table("T").add_column("COLUMN", "STRING", False, False, None).new_query().alter().table("T").add_column("COLUMN2", "STRING", False, if_not_exists=False,default_value=None)
 }
 
 expected = {
@@ -152,7 +153,8 @@ expected = {
     'CASE (null values)': "MATCH (n: Person) RETURN n.name, CASE WHEN n.age IS NULL THEN -1 ELSE n.age - 10 END"
                           " AS age_10_years_ago",
     'CASE (with set)': "MATCH (n: Person) WITH n, CASE n.eyes WHEN 'blue' THEN 1 WHEN 'brown' THEN 2 ELSE 3 END "
-                       "AS colorCode SET n.colorCode = colorCode RETURN n.name, n.colorCode"
+                       "AS colorCode SET n.colorCode = colorCode RETURN n.name, n.colorCode",
+    'New Query': 'ALTER TABLE T ADD COLUMN STRING; ALTER TABLE T ADD COLUMN2 STRING'
 }
 
 

@@ -1,7 +1,7 @@
 {
     "clause_name": "Add Column",
     "successors": [
-        "QueryStartAvailable"
+        "NewQuery"
     ],
     "methods": [
         {
