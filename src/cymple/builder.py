@@ -40,6 +40,43 @@ class QueryStart(Query):
     """A class for representing a "QUERY START" clause."""
 
 
+class AddColumn(Query):
+    """A class for representing a "ADD COLUMN" clause."""
+
+    def add_column(self, name: str, type: str, primary_key: bool = False, if_not_exists: bool = True, default_value: any = None):
+        """Add a column.
+
+        :param name: The name of the column to add
+        :type name: str
+        :param type: The type of the column to add
+        :type type: str
+        :param primary_key: Is the column a primary key, defaults to False
+        :type primary_key: bool
+        :param if_not_exists: Add the IF NOT EXISTS flag, defaults to True
+        :type if_not_exists: bool
+        :param default_value: The default value of the column, defaults to None
+        :type default_value: any
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: AddColumnAvailable
+        """
+        query_part = f" ADD{" IF NOT EXISTS" if if_not_exists else ""} {name} {type}{f" DEFAULT {default_value}" if default_value is not None else ""}{
+            " PRIMARY KEY" if primary_key else ""}"
+        return AddColumnAvailable(self.query + query_part)
+
+
+class Alter(Query):
+    """A class for representing a "ALTER" clause."""
+
+    def alter(self):
+        """Concatenate the "ALTER" clause.
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: AlterAvailable
+        """
+        return AlterAvailable(self.query + ' ALTER')
+
+
 class Call(Query):
     """A class for representing a "CALL" clause."""
 
@@ -157,6 +194,23 @@ class Delete(Query):
         return DeleteAvailable(self.query + ret)
 
 
+class DropColumn(Query):
+    """A class for representing a "DROP COLUMN" clause."""
+
+    def drop_column(self, name: str, if_exists: bool = True):
+        """A column to drop.
+
+        :param name: The name of the column to drop
+        :type name: str
+        :param if_exists: Add the IF EXISTS flag, defaults to True
+        :type if_exists: bool
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: DropColumnAvailable
+        """
+        return DropColumnAvailable(self.query + f" DROP {"IF EXISTS " if if_exists else ""}{name}")
+
+
 class Limit(Query):
     """A class for representing a "LIMIT" clause."""
 
@@ -212,7 +266,7 @@ class Node(Query):
     def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
-        :param labels: The neo4j label (or list of labels) for that node, defaults to None
+        :param labels: The label (or list of labels) for that node, defaults to None
         :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -256,7 +310,7 @@ class NodeAfterMerge(Query):
     def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
 
-        :param labels: The neo4j label (or list of labels) for that node, defaults to None
+        :param labels: The label (or list of labels) for that node, defaults to None
         :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -336,7 +390,7 @@ class OperatorStart(Query):
     def operator_start(self, operator: str, ref_name: str = None, args: dict = None):
         """Concatenate an operator (e.g. ShortestPath), where its result may be given a name for future reference.
 
-        :param operator: The neo4j operator to be used (e.g. ShortestPath)
+        :param operator: The operator to be used (e.g. ShortestPath)
         :type operator: str
         :param ref_name: A reference name of the result, to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -794,6 +848,21 @@ class Skip(Query):
         return SkipAvailable(self.query + ret)
 
 
+class Table(Query):
+    """A class for representing a "TABLE" clause."""
+
+    def table(self, name: str):
+        """Add a table statement.
+
+        :param name: The name of the table
+        :type name: str
+
+        :return: A Query object with a query that contains the new clause.
+        :rtype: TableAvailable
+        """
+        return TableAvailable(self.query + f' TABLE {name}')
+
+
 class Union(Query):
     """A class for representing a "UNION" clause."""
 
@@ -921,8 +990,16 @@ class Yield(Query):
         return YieldAvailable(self.query + query)
 
 
-class QueryStartAvailable(Match, Merge, Call, Create, With):
+class QueryStartAvailable(Match, Merge, Call, Create, With, Alter):
     """A class decorator declares a QueryStart is available in the current query."""
+
+
+class AddColumnAvailable(QueryStartAvailable):
+    """A class decorator declares a AddColumn is available in the current query."""
+
+
+class AlterAvailable(Table):
+    """A class decorator declares a Alter is available in the current query."""
 
 
 class CallAvailable(Procedure):
@@ -943,6 +1020,10 @@ class CreateAvailable(Node, Union):
 
 class DeleteAvailable(Return, CaseWhen, Union):
     """A class decorator declares a Delete is available in the current query."""
+
+
+class DropColumnAvailable(QueryStartAvailable):
+    """A class decorator declares a DropColumn is available in the current query."""
 
 
 class LimitAvailable(QueryStartAvailable, Unwind, Where, CaseWhen, Return, Set, Skip, Union):
@@ -1017,6 +1098,10 @@ class SkipAvailable(QueryStartAvailable, Unwind, Where, CaseWhen, Return, Set, R
     """A class decorator declares a Skip is available in the current query."""
 
 
+class TableAvailable(AddColumn, DropColumn):
+    """A class decorator declares a Table is available in the current query."""
+
+
 class UnionAvailable(Call, Create, Delete, Match, Merge, Remove, Return, Set, Unwind, With):
     """A class decorator declares a Union is available in the current query."""
 
@@ -1037,7 +1122,7 @@ class YieldAvailable(QueryStartAvailable, Node, Where, Return):
     """A class decorator declares a Yield is available in the current query."""
 
 
-class AnyAvailable(Call, Case, CaseWhen, Create, Delete, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Union, Unwind, Where, With, Yield):
+class AnyAvailable(AddColumn, Alter, Call, Case, CaseWhen, Create, Delete, DropColumn, Limit, Match, Merge, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Table, Union, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 

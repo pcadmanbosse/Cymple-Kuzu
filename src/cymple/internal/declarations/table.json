@@ -1,0 +1,19 @@
+{
+    "clause_name": "TABLE",
+    "successors": [
+        "AddColumn",
+        "DropColumn"
+    ],
+    "methods": [
+        {
+            "name": "table",
+            "docstring_summary": "Add a table statement",
+            "args": {
+                "name": {
+                    "type": "str",
+                    "description": "The name of the table"
+                }
+            }
+        }
+    ]
+}

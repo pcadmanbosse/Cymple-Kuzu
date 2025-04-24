@@ -1,0 +1,23 @@
+{
+    "clause_name": "Drop Column",
+    "successors": [
+        "QueryStartAvailable"
+    ],
+    "methods": [
+        {
+            "name": "drop_column",
+            "docstring_summary": "A column to drop",
+            "args": {
+                "name": {
+                    "type": "str",
+                    "description": "The name of the column to drop"
+                },
+                "if_exists": {
+                    "type": "bool", 
+                    "description": "Add the IF EXISTS flag",
+                    "default": "True"
+                }
+            }
+        }
+    ]
+}

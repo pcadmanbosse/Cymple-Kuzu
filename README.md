@@ -1,4 +1,5 @@
 # Cymple - Cypher Modular Pythonic Language Extension
+# Forked from https://github.com/Accenture/Cymple and adapted for kuzu
 
 A productivity tool for creating Cypher queries in Python.
 
@@ -6,9 +7,6 @@ A productivity tool for creating Cypher queries in Python.
 [![Python package](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml/badge.svg)](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml)
 
 ## About the project
-
-Cymple is a lightweight Python package for creating queries in Cypher, Neo4j's graph database query language. 
-Give it a try, it's 'Cymple'!
 
 Consider using Cymple if you want:
 * auto-completion for writing Cypher
@@ -46,7 +44,6 @@ MATCH (p: Person) WHERE p.name = "Michelle" RETURN p
 See the `samples` directory for examples. 
 
 ##### Cymple is intended for creating Cypher queries in Python, rather than executing queries on an actual DB. 
-##### For executing queries, see [Neo4j's Bolt driver for Python](https://github.com/neo4j/neo4j-python-driver). See also `neo4j_e2e.py` in the `samples` directory. 
 
 
 #### Autocompletion

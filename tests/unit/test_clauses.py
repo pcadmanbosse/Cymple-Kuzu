@@ -5,6 +5,9 @@ qb = QueryBuilder()
 
 rendered = {
     '_RESET_': qb.reset(),
+    'ALTER TABLE (add)': qb.reset().alter().table(name="TABLE").add_column(name="bool_col", type="BOOL", primary_key=True, default_value="True"),
+    'ALTER TABLE (add simple)': qb.reset().alter().table(name="TABLE").add_column(name="simple", type="STRING", if_not_exists=False),
+    'ALTER TABLE (drop)': qb.reset().alter().table(name="TABLE").drop_column(name="bool_col"),
     'CALL': qb.reset().call().procedure("db.labels()"),
     'CASE WHEN': qb.reset().match().node(ref_name='n').with_('n').case_when({'n.name': 'Bob'}, 'true', 'false', 'my_boolean'),
     'DELETE': qb.reset().match().node(ref_name='n').delete('n'),
@@ -76,6 +79,9 @@ rendered = {
 
 expected = {
     '_RESET_': '',
+    'ALTER TABLE (add)': "ALTER TABLE TABLE ADD IF NOT EXISTS bool_col BOOL DEFAULT True PRIMARY KEY",
+    'ALTER TABLE (add simple)': "ALTER TABLE TABLE ADD simple STRING",
+    'ALTER TABLE (drop)': "ALTER TABLE TABLE DROP IF EXISTS bool_col",
     'CALL': 'CALL db.labels()',
     'CASE WHEN': 'MATCH (n) WITH n CASE WHEN n.name = "Bob" THEN true ELSE false END AS my_boolean',
     'DELETE': 'MATCH (n) DELETE n',

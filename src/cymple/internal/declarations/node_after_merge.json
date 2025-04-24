@@ -8,7 +8,7 @@
         "labels": {
           "type": "Union[List[str], str]",
           "default": "None",
-          "description": "The neo4j label (or list of labels) for that node"
+          "description": "The label (or list of labels) for that node"
         },
         "ref_name": {
           "type": "str",

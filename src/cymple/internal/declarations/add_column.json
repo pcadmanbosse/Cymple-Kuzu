@@ -1,0 +1,37 @@
+{
+    "clause_name": "Add Column",
+    "successors": [
+        "QueryStartAvailable"
+    ],
+    "methods": [
+        {
+            "name": "add_column",
+            "docstring_summary": "Add a column",
+            "args": {
+                "name": {
+                    "type": "str",
+                    "description": "The name of the column to add"
+                },
+                "type": {
+                    "type": "str", 
+                    "description": "The type of the column to add"
+                },
+                "primary_key": {
+                    "type": "bool", 
+                    "description": "Is the column a primary key", 
+                    "default": "False"
+                },
+                "if_not_exists": {
+                    "type": "bool", 
+                    "description": "Add the IF NOT EXISTS flag",
+                    "default": "True"
+                },
+                "default_value": {
+                    "type": "any", 
+                    "description": "The default value of the column",
+                    "default": "None"
+                }
+            }
+        }
+    ]
+}

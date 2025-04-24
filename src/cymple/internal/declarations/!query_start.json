@@ -6,6 +6,7 @@
       "Merge", 
       "Call",
       "Create",
-      "With"
+      "With",
+      "Alter"
     ] 
   }

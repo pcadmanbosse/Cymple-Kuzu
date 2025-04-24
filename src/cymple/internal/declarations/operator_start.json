@@ -7,7 +7,7 @@
       "args": {
         "operator": {
           "type": "str",
-          "description": "The neo4j operator to be used (e.g. ShortestPath)"
+          "description": "The operator to be used (e.g. ShortestPath)"
         },
         "ref_name": {
           "type": "str",
