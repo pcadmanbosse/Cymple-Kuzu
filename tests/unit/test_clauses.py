@@ -1,5 +1,7 @@
+from cymple.typedefs import GraphModel
 import pytest
 from cymple import QueryBuilder
+from tests.unit.test_utils import TestModel
 
 qb = QueryBuilder()
 
@@ -16,6 +18,8 @@ rendered = {
     'WHERE (multiple)': qb.reset().match().node(ref_name='n').where_multiple({'n.name': 'value', 'n.age': 20}),
     'WHERE (literal)': qb.reset().match().node(ref_name='n').where_literal('NOT exists(n)'),
     'MATCH': qb.reset().match(),
+    'MATCH GraphModel node': qb.reset().match().node_model(GraphModel("y")).return_literal("y"),
+    'MATCH GraphModel node with params': qb.reset().match().node_model(TestModel("y", id="10", age=10)).return_literal("y"),
     'MATCH OPTIONAL': qb.reset().match_optional(),
     'MERGE': qb.reset().merge(),
     'NODE': qb.reset().match().node(['label1', 'label2'], 'node', {'name': 'Bob'}),
@@ -91,6 +95,8 @@ expected = {
     'WHERE (multiple)': 'MATCH (n) WHERE n.name = "value" AND n.age = 20',
     'WHERE (literal)': 'MATCH (n) WHERE NOT exists(n)',
     'MATCH': 'MATCH',
+    'MATCH GraphModel node': 'MATCH (y:GRAPH_MODEL) RETURN y',
+    'MATCH GraphModel node with params': 'MATCH (y:TEST_MODEL {id : "10", age : 10}) RETURN y',
     'MATCH OPTIONAL': 'OPTIONAL MATCH',
     'MERGE': 'MERGE',
     'NODE': 'MATCH (node: label1: label2 {name : "Bob"})',
