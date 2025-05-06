@@ -1,22 +1,29 @@
 import re
 
 class ExpressionMixin:
-    def __add__(self, other): return Expr(self, '+', other)
-    def __radd__(self, other): return Expr(other, '+', self)
-    def __mul__(self, other): return Expr(self, '*', other)
-    def __rmul__(self, other): return Expr(other, '*', self)
-    def __truediv__(self, other): return Expr(self, '/', other)
-    def __rtruediv__(self, other): return Expr(other, '/', self)
-    def __sub__(self, other): return Expr(self, '-', other)
-    def __rsub__(self, other): return Expr(other, '-', self)
-    def __lt__(self, other): return Expr(self, '<', other)
-    def __le__(self, other): return Expr(self, '<=', other)
-    def __gt__(self, other): return Expr(self, '>', other)
-    def __ge__(self, other): return Expr(other, '<=', self)
-    def __eq__(self, other): return Expr(self, '=', other)
-    def __ne__(self, other): return Expr(self, '<>', other)
-    def __and__(self, other): return Expr(self, 'AND', other)
-    def __or__(self, other): return Expr(self, 'OR', other)
+    def __formatted__(self, other):
+        if isinstance(other, ExpressionMixin):
+            return other
+        elif isinstance(other, str):
+            return f"'{other}'"
+        return other
+    
+    def __add__(self, other): return Expr(self, '+', self.__formatted__(other))
+    def __radd__(self, other): return Expr(self.__formatted__(other), '+', self)
+    def __mul__(self, other): return Expr(self, '*', self.__formatted__(other))
+    def __rmul__(self, other): return Expr(self.__formatted__(other), '*', self)
+    def __truediv__(self, other): return Expr(self, '/', self.__formatted__(other))
+    def __rtruediv__(self, other): return Expr(self.__formatted__(other), '/', self)
+    def __sub__(self, other): return Expr(self, '-', self.__formatted__(other))
+    def __rsub__(self, other): return Expr(self.__formatted__(other), '-', self)
+    def __lt__(self, other): return Expr(self, '<', self.__formatted__(other))
+    def __le__(self, other): return Expr(self, '<=', self.__formatted__(other))
+    def __gt__(self, other): return Expr(self, '>', self.__formatted__(other))
+    def __ge__(self, other): return Expr(self.__formatted__(other), '<=', self)
+    def __eq__(self, other): return Expr(self, '=', self.__formatted__(other))
+    def __ne__(self, other): return Expr(self, '<>', self.__formatted__(other))
+    def __and__(self, other): return Expr(self, 'AND', self.__formatted__(other))
+    def __or__(self, other): return Expr(self, 'OR', self.__formatted__(other))
 
 class Expr(ExpressionMixin):
     def __init__(self, left, op, right):

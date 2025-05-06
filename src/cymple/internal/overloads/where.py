@@ -2,6 +2,7 @@ from typing import Any
 
 
 def where_literal(self, statement: str, **kwargs):
+    statement = str(statement)
     filt = ' WHERE ' + statement
     return WhereAvailable(self.query + filt)
 

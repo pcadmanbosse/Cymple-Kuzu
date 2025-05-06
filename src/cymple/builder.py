@@ -765,6 +765,7 @@ class Return(Query):
         """
         ret = f' RETURN'
         if literal is not None:
+            literal = str(literal)
             ret += f' {literal}'
 
         return ReturnAvailable(self.query + ret)
@@ -961,6 +962,7 @@ class Where(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: WhereAvailable
         """
+        statement = str(statement)
         filt = ' WHERE ' + statement
         return WhereAvailable(self.query + filt)
 

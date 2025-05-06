@@ -26,7 +26,7 @@ def test_instance_field_access_with_alias():
 def test_expression_chaining():
     loc = Location("l")
     expr = (loc.id == "ABC") & (loc.age > 30) | (loc.name != "Test")
-    assert str(expr) == '(((l.id = ABC) AND (l.age > 30)) OR (l.name <> Test))'
+    assert str(expr) == '(((l.id = \'ABC\') AND (l.age > 30)) OR (l.name <> \'Test\'))'
 
 
 def test_math_expressions():

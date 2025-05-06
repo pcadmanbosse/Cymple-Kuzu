@@ -2,6 +2,7 @@
 def return_literal(self, literal):
     ret = f' RETURN'
     if literal is not None:
+        literal = str(literal)
         ret += f' {literal}'
 
     return ReturnAvailable(self.query + ret)
