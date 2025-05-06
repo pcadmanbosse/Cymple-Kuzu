@@ -6,8 +6,12 @@ def node(self, labels=None, ref_name: str = None, properties: dict = None, **kwa
         labels_string = ''
     elif isinstance(labels, str):
         labels_string = f': {labels}'
-    else:
+    elif isinstance(labels, list):
+        labels = [str(x) for x in labels]
         labels_string = f': {": ".join(labels).strip()}'
+    else:
+        labels_string = f':{str(labels)}'
+
 
     if not properties:
         property_string = ''

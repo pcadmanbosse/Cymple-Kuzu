@@ -29,6 +29,7 @@ rendered = {
     'WHERE (single)': qb.reset().match().node(ref_name=n).where(f'{n.attribute_1}', '=', 'value'),
     'WHERE (multiple)': qb.reset().match().node(ref_name=n).where_multiple({f'{n.attribute_1}': 'value', f'{n.attribute_2}': 20}),
     'WHERE (literal)': qb.reset().match().node(ref_name=n, properties={Node.attribute_1: 10, Node.attribute_2: 10}).where_literal((n.attribute_2 == "10") & (n.attribute_2 >= 3) & (n.attribute_3 != r.attribute_3)),
+    'WHERE (mix of instance and class references)': qb.reset().match().node(Node, n).where_literal((n.attribute_2 == "10") & (n.attribute_2 >= 3)).return_literal(f"sum({n.attribute_1 + n.attribute_2})")
 }
 
 expected = {
@@ -39,7 +40,8 @@ expected = {
     'DETACH DELETE': 'MATCH (n) DETACH DELETE n',
     'WHERE (single)': 'MATCH (n) WHERE n.attribute_1 = "value"',
     'WHERE (multiple)': 'MATCH (n) WHERE n.attribute_1 = "value" AND n.attribute_2 = 20',
-    'WHERE (literal)': 'MATCH (n {attribute_1 : 10, attribute_2 : 10}) WHERE (((n.attribute_2 = \'10\') AND (3 <= n.attribute_2)) AND (n.attribute_3 <> r.attribute_3))'
+    'WHERE (literal)': 'MATCH (n {attribute_1 : 10, attribute_2 : 10}) WHERE (((n.attribute_2 = \'10\') AND (3 <= n.attribute_2)) AND (n.attribute_3 <> r.attribute_3))',
+    'WHERE (mix of instance and class references)': "MATCH (n:NODE) WHERE ((n.attribute_2 = '10') AND (3 <= n.attribute_2)) RETURN sum((n.attribute_1 + n.attribute_2))"
 }
 
 
