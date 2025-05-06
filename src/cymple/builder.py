@@ -4,7 +4,7 @@
 # pylint: disable=R0903
 # pylint: disable=W0102
 from typing import List, Union, Dict, Any
-from .typedefs import Mapping, Properties, GraphModel
+from .typedefs import Mapping, Properties
 
 
 class Query():
@@ -274,29 +274,6 @@ class NewQuery(Query):
 
 class Node(Query):
     """A class for representing a "NODE" clause."""
-
-    def node_model(self, node: GraphModel, **kwargs):
-        """Construct a node from a GraphModel.
-
-        :param node: The graph model to generate the node definition from.
-        :type node: GraphModel
-        :param **kwargs: kwargs
-        :type **kwargs
-
-        :return: A Query object with a query that contains the new clause.
-        :rtype: NodeAvailable
-        """
-        query = self.query
-        if not (query.endswith('-') or query.endswith('>') or query.endswith('<')):
-            query += ' '
-        ref_name = f'{node.__alias__}:' if node.__alias__ != "" else ""
-        label_string = node.label
-        if len(node.properties) > 0:
-            property_string = f' {{{Properties(node.properties).to_str(**kwargs)}}}'
-        else:
-            property_string = ''
-        query += f'({ref_name}{label_string}{property_string})'
-        return NodeAvailable(query)
 
     def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
         """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.

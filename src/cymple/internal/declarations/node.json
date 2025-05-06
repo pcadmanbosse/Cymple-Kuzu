@@ -2,19 +2,6 @@
   "clause_name": "NODE",
   "methods": [
     {
-      "name": "node_model",
-      "docstring_summary": "Construct a node from a GraphModel",
-      "args": {
-        "node": {
-          "type": "GraphModel",
-          "description": "The graph model to generate the node definition from."
-        },
-        "**kwargs": {
-          "description": "kwargs"
-        }
-      }
-    },
-    {
       "name": "node",
       "docstring_summary": "Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.",
       "args": {
