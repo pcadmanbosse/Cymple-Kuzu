@@ -42,7 +42,7 @@ def test_field_repr_and_str():
 
 
 def test_expr_repr():
-    expr = Expr("x", "+", 5)
+    expr = Expr("x", "+", 5, str)
     assert repr(expr) == "(x + 5)"
 
 
