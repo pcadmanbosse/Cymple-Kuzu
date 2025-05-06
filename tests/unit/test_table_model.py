@@ -90,3 +90,21 @@ def test_all_expression_operators():
     assert str(f != 10) == "(n.x <> 10)"
     assert str((f == 1) & (f != 2)) == "((n.x = 1) AND (n.x <> 2))"
     assert str((f > 1) | (f < 10)) == "((n.x > 1) OR (n.x < 10))"
+
+class Line(TableModel):
+    quantity: int
+
+
+class Node(TableModel):
+    total_input: int
+
+def test_cross_model_expression():
+    l = Line("l")
+    n = Node("n")
+
+    expr = l.quantity > n.total_input
+    assert str(expr) == "(l.quantity > n.total_input)"
+
+    # More complex case:
+    complex_expr = (l.quantity > n.total_input) & (l.quantity < 100)
+    assert str(complex_expr) == "((l.quantity > n.total_input) AND (l.quantity < 100))"
