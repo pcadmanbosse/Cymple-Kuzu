@@ -7,7 +7,6 @@ class ExpressionMixin:
         elif isinstance(other, str):
             return f"'{other}'"
         return other
-    
     def __add__(self, other): return Expr(self, '+', self.__formatted__(other))
     def __radd__(self, other): return Expr(self.__formatted__(other), '+', self)
     def __mul__(self, other): return Expr(self, '*', self.__formatted__(other))
@@ -34,6 +33,8 @@ class Expr(ExpressionMixin):
     def __repr__(self):
         return f"({self.left} {self.op} {self.right})"
 
+    def __getattr__(self):
+        return self.__repr__()
     
 class Field(ExpressionMixin):
     def __init__(self, name: str, type_: type, alias=None):
@@ -50,6 +51,9 @@ class Field(ExpressionMixin):
         aliased._alias = instance.__alias__
         return aliased
 
+    def __getattr__(self):
+        return self.__repr__()
+    
     def __str__(self):
         return f"{self._alias}.{self._name}" if self._alias else self._name
 
