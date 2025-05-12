@@ -69,7 +69,7 @@ MATCH (p: Person) WITH p MATCH (q: Person)-[: friend_of]->(p)
 
 ### Prerequisites
 
-* Python 3.8+
+* Python 3.9+
 
 ## Contributing
 
