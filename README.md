@@ -21,7 +21,7 @@ Consider using Cymple if you want:
 
 ### Setup
 ```shell
-pip install cymple
+pip install cymple-kuzu
 ```
 
 ### Examples
@@ -29,7 +29,7 @@ pip install cymple
 #### Simple Example
 Let's take a look at the following snippet. 
 ```python
-from cymple import QueryBuilder
+from cymple-kuzu import QueryBuilder
 
 qb = QueryBuilder()
 query = qb.match().node(labels='Person', ref_name='p')

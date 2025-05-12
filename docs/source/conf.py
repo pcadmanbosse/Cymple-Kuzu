@@ -18,9 +18,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Cymple'
-copyright = '2022, Accenture Labs Israel'
-author = 'Accenture Labs Israel'
+project = 'Cymple - Kuzu'
 version = __version__
 release = __version__
 

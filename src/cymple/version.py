@@ -1,3 +1,3 @@
-"""Version information for Cymple"""
+"""Version information for Cymple-Kuzu"""
 
-__version__: str = "0.12.0"
+__version__: str = "0.0.1"
