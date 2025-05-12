@@ -31,6 +31,9 @@ jobs:
       - release-build
     permissions:
       id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/cymple-kuzu
 
     steps:
       - name: Retrieve release distributions
