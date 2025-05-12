@@ -2,7 +2,8 @@ name: Upload Python Package to PyPI when a Release is Created
 
 on:
   release:
-    types: [published, created, workflow_dispatch]
+    types: [published, created]
+  workflow_dispatch:
 
 # 👇 Add this at the top level
 permissions:
