@@ -3,6 +3,11 @@ name: Upload Python Package to PyPI when a Release is Created
 on:
   release:
     types: [published, created]
+
+# 👇 Add this at the top level
+permissions:
+  id-token: write
+  contents: read  # Needed by most actions including checkout
 jobs:
   release-build:
     runs-on: ubuntu-latest
