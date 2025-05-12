@@ -60,8 +60,10 @@ class AddColumn(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: AddColumnAvailable
         """
-        query_part = f""" ADD{" IF NOT EXISTS" if if_not_exists else ""} {name} {type}{f""" DEFAULT {default_value}""" if default_value is not None else ""}{
-            " PRIMARY KEY" if primary_key else ""}"""
+        if_not_exists_part = " IF NOT EXISTS" if if_not_exists else ""
+        default_part = f" DEFAULT {default_value}" if default_value is not None else ""
+        primary_key_part = " PRIMARY KEY" if primary_key else ""
+        query_part = f""" ADD{if_not_exists_part} {name} {type}{default_part}{primary_key_part}"""
         return AddColumnAvailable(self.query + query_part)
 
 
