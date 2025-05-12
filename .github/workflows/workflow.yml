@@ -46,10 +46,11 @@ jobs:
         with:
           name: release-dists
           path: dist/
-
+          
       - name: Print OIDC env vars
         run: |
         echo "Token: $ACTIONS_ID_TOKEN_REQUEST_TOKEN"
         echo "URL: $ACTIONS_ID_TOKEN_REQUEST_URL"
+
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
