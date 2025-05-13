@@ -1,10 +1,7 @@
-# Cymple - Cypher Modular Pythonic Language Extension
+# Cymple-Kuzu - Cypher Modular Pythonic Language Extension
 # Forked from https://github.com/Accenture/Cymple and adapted for kuzu
 
 A productivity tool for creating Cypher queries in Python.
-
-[![Documentation Status](https://readthedocs.org/projects/cymple/badge/?version=latest)](https://cymple.readthedocs.io/en/latest/?badge=latest)
-[![Python package](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml/badge.svg)](https://github.com/Accenture/Cymple/actions/workflows/python-test.yml)
 
 ## About the project
 
@@ -29,7 +26,7 @@ pip install cymple-kuzu
 #### Simple Example
 Let's take a look at the following snippet. 
 ```python
-from cymple-kuzu import QueryBuilder
+from cymple import QueryBuilder
 
 qb = QueryBuilder()
 query = qb.match().node(labels='Person', ref_name='p')
