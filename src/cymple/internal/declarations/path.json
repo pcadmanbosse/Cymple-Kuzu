@@ -1,0 +1,19 @@
+{
+    "clause_name": "PATH",
+    "methods": [
+        {
+            "name": "path",
+            "docstring_summary": "Concatenate a {ref_name} = path clause, to use later in the query.",
+            "args": {
+                "ref_name": {
+                    "type": "str",
+                    "description": "A reference name to be used later in the rest of the query"
+                }
+            }
+        }
+    ],
+    "successors": [
+        "Node",
+        "OperatorStart"
+    ]
+}
