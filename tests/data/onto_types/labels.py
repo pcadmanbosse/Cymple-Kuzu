@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Labels:
+class labels:
     Application: str = "Application"
     CVEType: str = "CVEType"
     CloudObject: str = "CloudObject"

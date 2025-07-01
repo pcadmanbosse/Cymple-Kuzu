@@ -5,10 +5,10 @@
       "name": "related",
       "docstring_summary": "Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.",
       "args": {
-        "label": {
+        "labels": {
           "type": "Union[str, list[str]]",
           "default": "None",
-          "description": "The relationship label (type or types) in the DB"
+          "description": "The relationship labels(type or types) in the DB"
         },
         "ref_name": {
           "type": "str",
@@ -44,10 +44,10 @@
       "name": "related_to",
       "docstring_summary": "Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.",
       "args": {
-        "label": {
+        "labels": {
           "type": "Union[str, list[str]]",
           "default": "None",
-          "description": "The relationship label (type or types) in the DB"
+          "description": "The relationship labels(type or types) in the DB"
         },
         "ref_name": {
           "type": "str",
@@ -83,10 +83,10 @@
       "name": "related_from",
       "docstring_summary": "Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.",
       "args": {
-        "label": {
+        "labels": {
           "type": "Union[str, list[str]]",
           "default": "None",
-          "description": "The relationship label (type or types) in the DB"
+          "description": "The relationship labels(type or types) in the DB"
         },
         "ref_name": {
           "type": "str",
@@ -126,9 +126,9 @@
           "type": "str",
           "description": "The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional"
         },
-        "label": {
+        "labels": {
           "type": "Union[str, list[str]]",
-          "description": "The relationship label (type or types) in the DB"
+          "description": "The relationship labels(type or types) in the DB"
         },
         "ref_name": {
           "type": "str",

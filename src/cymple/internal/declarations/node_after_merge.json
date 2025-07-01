@@ -3,12 +3,12 @@
   "methods": [
     {
       "name": "node",
-      "docstring_summary": "Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.",
+      "docstring_summary": "Concatenate a graph Node, which may be filtered using any labels/s and/or property/properties.",
       "args": {
         "labels": {
           "type": "Union[List[str], str]",
           "default": "None",
-          "description": "The label (or list of labels) for that node"
+          "description": "The labels(or list of labels) for that node"
         },
         "ref_name": {
           "type": "str",

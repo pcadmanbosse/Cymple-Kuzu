@@ -1,13 +1,13 @@
 from cymple import QueryBuilder
 
-from ..data.onto_types.labels import Labels
+from ..data.onto_types.labels import labels
 from ..data.onto_types.properties import Properties
 from ..data.onto_types.relations import Relations
 
 
 def cypher_get_all_findings():
     output_mapping = [('n', 'n')]
-    query = QueryBuilder().match().node(Labels.Finding, 'n').return_mapping(output_mapping).get()
+    query = QueryBuilder().match().node(labels.Finding, 'n').return_mapping(output_mapping).get()
     return query
 
 
@@ -18,11 +18,11 @@ def cypher_get_findings():
                       (f'ct.{Properties.has_id}', 'cve')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Finding, 'f')
+             .node(labels.Finding, 'f')
              .related_to(Relations.has_finding_type)
-             .node(Labels.FindingType, 't')
+             .node(labels.FindingType, 't')
              .related_to(Relations.has_cve)
-             .node(Labels.CVEType, 'ct')
+             .node(labels.CVEType, 'ct')
              .return_mapping(output_mapping)
              .get())
 
@@ -34,7 +34,7 @@ def cypher_get_services():
                       (f's.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.ServiceType, 's')
+             .node(labels.ServiceType, 's')
              .return_mapping(output_mapping)
              .get())
 
@@ -46,7 +46,7 @@ def cypher_get_identities():
                       (f'i.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Identity, 'i')
+             .node(labels.Identity, 'i')
              .return_mapping(output_mapping)
              .get())
 
@@ -58,7 +58,7 @@ def cypher_get_business_applications():
                       (f'a.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Application, 'a')
+             .node(labels.Application, 'a')
              .return_mapping(output_mapping)
              .get())
 
@@ -75,11 +75,11 @@ def cypher_get_finding_detailed(finding_id):
                       (f't.recommendation', 'recommendations')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Finding, 'f', {Properties.has_id: finding_id})
+             .node(labels.Finding, 'f', {Properties.has_id: finding_id})
              .related_to(Relations.has_finding_type)
-             .node(Labels.FindingType, 't')
+             .node(labels.FindingType, 't')
              .related_to(Relations.has_cve)
-             .node(Labels.CVEType, 'ct')
+             .node(labels.CVEType, 'ct')
              .return_mapping(output_mapping)
              .get())
 
@@ -91,7 +91,7 @@ def cypher_get_business_application(application_id):
                       (f'a.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Application, 'a', {Properties.has_id: application_id})
+             .node(labels.Application, 'a', {Properties.has_id: application_id})
              .return_mapping(output_mapping)
              .get())
 
@@ -102,9 +102,9 @@ def cypher_get_references_for_finding(finding_id):
     output_mapping = [(f'r.{Properties.has_description}', 'reference')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Finding, None, {Properties.has_id: finding_id})
+             .node(labels.Finding, None, {Properties.has_id: finding_id})
              .related_to(Relations.has_reference)
-             .node(Labels.ReferenceType, 'r')
+             .node(labels.ReferenceType, 'r')
              .return_mapping(output_mapping)
              .get())
 
@@ -115,9 +115,9 @@ def cypher_get_applications_for_finding(finding_id):
     output_mapping = [(f'a.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Finding, None, {Properties.has_id: finding_id})
+             .node(labels.Finding, None, {Properties.has_id: finding_id})
              .related_to(Relations.has_cloud_object)
-             .node(Labels.Application, 'a')
+             .node(labels.Application, 'a')
              .return_mapping(output_mapping)
              .get())
 
@@ -129,11 +129,11 @@ def cypher_get_finding_type_details_per_id(id):
                       (f'collect(t.{Properties.has_probability})', 'probabilities')]
 
     query = (QueryBuilder().match()
-             .node(Labels.FindingType, 't')
+             .node(labels.FindingType, 't')
              .related_from(Relations.has_finding_type)
-             .node(Labels.Finding)
+             .node(labels.Finding)
              .related_to(Relations.has_cloud_object)
-             .node(Labels.CloudObject)
+             .node(labels.CloudObject)
              .related_to(Relations.has_service)
              .node(None, None, {Properties.has_id: id})
              .return_mapping(output_mapping)
@@ -149,15 +149,15 @@ def cypher_get_finding_details_for_application(application_id):
                       (f'ct.{Properties.has_id}', 'cve')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Application, None, {Properties.has_id: application_id})
+             .node(labels.Application, None, {Properties.has_id: application_id})
              .related_to(Relations.has_cloud_object)
-             .node(Labels.CloudObject)
+             .node(labels.CloudObject)
              .related_from(Relations.has_cloud_object)
-             .node(Labels.Finding, 'f')
+             .node(labels.Finding, 'f')
              .related_to(Relations.has_finding_type)
-             .node(Labels.FindingType, 't')
+             .node(labels.FindingType, 't')
              .related_to(Relations.has_cve)
-             .node(Labels.CVEType, 'ct')
+             .node(labels.CVEType, 'ct')
              .return_mapping(output_mapping)
              .get())
 
@@ -169,11 +169,11 @@ def cypher_get_service_details_for_application(application_id):
                       (f's.{Properties.has_name}', 'name')]
 
     query = (QueryBuilder().match()
-             .node(Labels.Application, None, {Properties.has_id: application_id})
+             .node(labels.Application, None, {Properties.has_id: application_id})
              .related_to(Relations.has_cloud_object)
-             .node(Labels.CloudObject)
+             .node(labels.CloudObject)
              .related_to(Relations.has_service)
-             .node(Labels.ServiceType, 's')
+             .node(labels.ServiceType, 's')
              .return_mapping(output_mapping)
              .get())
 
@@ -182,7 +182,7 @@ def cypher_get_service_details_for_application(application_id):
 
 def cypher_match_set_id(service_id):
     query = (QueryBuilder().match()
-             .node(Labels.ServiceType, 's')
+             .node(labels.ServiceType, 's')
              .set({Properties.has_id: service_id})
              .return_literal('s')
              .get())
@@ -192,7 +192,7 @@ def cypher_match_set_id(service_id):
 
 def cypher_merge_on_match(service_id):
     query = (QueryBuilder().merge()
-             .node(Labels.ServiceType, 's')
+             .node(labels.ServiceType, 's')
              .on_match()
              .set({Properties.has_id: service_id})
              .return_literal('s')
@@ -203,11 +203,11 @@ def cypher_merge_on_match(service_id):
 
 def cypher_relationship_properties(service_id):
     query = (QueryBuilder().match()
-             .node(Labels.Application)
+             .node(labels.Application)
              .related_to(Relations.has_cloud_object)
-             .node(Labels.CloudObject)
+             .node(labels.CloudObject)
              .related_to(Relations.has_service, properties={Properties.has_id: service_id})
-             .node(Labels.ServiceType, 's', {Properties.has_id: service_id})
+             .node(labels.ServiceType, 's', {Properties.has_id: service_id})
              .return_literal('s')
              .get())
 
@@ -215,15 +215,15 @@ def cypher_relationship_properties(service_id):
 
 
 def test_cypher_get_all_findings():
-    expected_query = f'MATCH (n: {Labels.Finding}) RETURN n AS n'
+    expected_query = f'MATCH (n: {labels.Finding}) RETURN n AS n'
     actual_query = cypher_get_all_findings()
     assert actual_query == expected_query
 
 
 def test_cypher_get_findings():
     expected_query = (
-        f'MATCH (f: {Labels.Finding})-[: {Relations.has_finding_type}]->'
-        f'(t: {Labels.FindingType})-[: {Relations.has_cve}]->(ct: {Labels.CVEType}) '
+        f'MATCH (f: {labels.Finding})-[: {Relations.has_finding_type}]->'
+        f'(t: {labels.FindingType})-[: {Relations.has_cve}]->(ct: {labels.CVEType}) '
         f'RETURN f.{Properties.has_id} AS id, t.{Properties.has_probability} AS probability, '
         f't.{Properties.has_severity} AS severity, ct.{Properties.has_id} AS cve')
     actual_query = cypher_get_findings()
@@ -231,14 +231,14 @@ def test_cypher_get_findings():
 
 
 def test_cypher_get_services():
-    expected_query = (f'MATCH (s: {Labels.ServiceType}) '
+    expected_query = (f'MATCH (s: {labels.ServiceType}) '
                       f'RETURN s.{Properties.has_id} AS id, s.{Properties.has_name} AS name')
     actual_query = cypher_get_services()
     assert actual_query == expected_query
 
 
 def test_cypher_get_business_applications():
-    expected_query = (f'MATCH (a: {Labels.Application}) '
+    expected_query = (f'MATCH (a: {labels.Application}) '
                       f'RETURN a.{Properties.has_id} AS id, a.{Properties.has_name} AS name')
     actual_query = cypher_get_business_applications()
     assert actual_query == expected_query
@@ -248,9 +248,9 @@ def test_cypher_get_finding_detailed():
     finding_id = 'THAT_is_MOCK_id'
 
     expected_query = (
-        f'MATCH (f: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})-'
-        f'[: {Relations.has_finding_type}]->(t: {Labels.FindingType})'
-        f'-[: {Relations.has_cve}]->(ct: {Labels.CVEType}) '
+        f'MATCH (f: {labels.Finding} {{{Properties.has_id} : "{finding_id}"}})-'
+        f'[: {Relations.has_finding_type}]->(t: {labels.FindingType})'
+        f'-[: {Relations.has_cve}]->(ct: {labels.CVEType}) '
         f'RETURN f.{Properties.has_id} AS id, '
         f't.{Properties.has_probability} AS probability, '
         f't.{Properties.has_severity} AS severity, ct.{Properties.has_id} AS cve, '
@@ -263,7 +263,7 @@ def test_cypher_get_finding_detailed():
 
 def test_cypher_get_business_application():
     application_id = 'THAT_is_MOCK_id'
-    expected_query = (f'MATCH (a: {Labels.Application} {{{Properties.has_id} : "{application_id}"}}) '
+    expected_query = (f'MATCH (a: {labels.Application} {{{Properties.has_id} : "{application_id}"}}) '
                       f'RETURN a.{Properties.has_id} AS id, a.{Properties.has_name} AS name')
     actual_query = cypher_get_business_application(application_id)
     assert actual_query == expected_query
@@ -272,8 +272,8 @@ def test_cypher_get_business_application():
 def test_cypher_get_references_for_finding():
     finding_id = 'THAT_is_MOCK_id'
 
-    expected_query = (f'MATCH (: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
-                      f'-[: {Relations.has_reference}]->(r: {Labels.ReferenceType}) '
+    expected_query = (f'MATCH (: {labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
+                      f'-[: {Relations.has_reference}]->(r: {labels.ReferenceType}) '
                       f'RETURN r.{Properties.has_description} AS reference')
 
     actual_query = cypher_get_references_for_finding(finding_id)
@@ -284,8 +284,8 @@ def test_cypher_get_applications_for_finding():
     finding_id = 'THAT_is_MOCK_id'
 
     expected_query = (
-        f'MATCH (: {Labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
-        f'-[: {Relations.has_cloud_object}]->(a: {Labels.Application}) '
+        f'MATCH (: {labels.Finding} {{{Properties.has_id} : "{finding_id}"}})'
+        f'-[: {Relations.has_cloud_object}]->(a: {labels.Application}) '
         f'RETURN a.{Properties.has_name} AS name')
 
     actual_query = cypher_get_applications_for_finding(finding_id)
@@ -296,9 +296,9 @@ def test_cypher_get_finding_type_details_for_service():
     service_id = 'THAT_is_MOCK_id'
 
     expected_query = (
-        f'MATCH (t: {Labels.FindingType})<-[: {Relations.has_finding_type}]-'
-        f'(: {Labels.Finding})-[: {Relations.has_cloud_object}]->'
-        f'(: {Labels.CloudObject})-[: {Relations.has_service}]->( {{{Properties.has_id} : "{service_id}"}}) '
+        f'MATCH (t: {labels.FindingType})<-[: {Relations.has_finding_type}]-'
+        f'(: {labels.Finding})-[: {Relations.has_cloud_object}]->'
+        f'(: {labels.CloudObject})-[: {Relations.has_service}]->( {{{Properties.has_id} : "{service_id}"}}) '
         f'RETURN collect(t.{Properties.has_severity}) AS severities, '
         f'collect(t.{Properties.has_probability}) AS probabilities')
 
@@ -309,7 +309,7 @@ def test_cypher_get_finding_type_details_for_service():
 def test_cypher_match_set_id():
     service_id = 'THAT_is_MOCK_id'
 
-    expected_query = f'MATCH (s: {Labels.ServiceType}) SET {Properties.has_id} = "{service_id}" RETURN s'
+    expected_query = f'MATCH (s: {labels.ServiceType}) SET {Properties.has_id} = "{service_id}" RETURN s'
 
     actual_query = cypher_match_set_id(service_id)
     assert actual_query == expected_query
@@ -318,7 +318,7 @@ def test_cypher_match_set_id():
 def test_cypher_merge_on_match():
     service_id = 'THAT_is_MOCK_id'
 
-    expected_query = f'MERGE (s: {Labels.ServiceType}) ON MATCH SET {Properties.has_id} = "{service_id}" RETURN s'
+    expected_query = f'MERGE (s: {labels.ServiceType}) ON MATCH SET {Properties.has_id} = "{service_id}" RETURN s'
 
     actual_query = cypher_merge_on_match(service_id)
     assert actual_query == expected_query
@@ -328,9 +328,9 @@ def test_cypher_relationship_properties():
     service_id = 'THAT_is_MOCK_id'
 
     expected_query = (
-        f'MATCH (: {Labels.Application})-[: {Relations.has_cloud_object}]->'
-        f'(: {Labels.CloudObject})-[: {Relations.has_service} {{{Properties.has_id} : "{service_id}"}}]->'
-        f'(s: {Labels.ServiceType} {{{Properties.has_id} : "{service_id}"}}) RETURN s')
+        f'MATCH (: {labels.Application})-[: {Relations.has_cloud_object}]->'
+        f'(: {labels.CloudObject})-[: {Relations.has_service} {{{Properties.has_id} : "{service_id}"}}]->'
+        f'(s: {labels.ServiceType} {{{Properties.has_id} : "{service_id}"}}) RETURN s')
 
     actual_query = cypher_relationship_properties(service_id)
     assert actual_query == expected_query
@@ -339,16 +339,16 @@ def test_cypher_query_add():
     service_id = 'THAT_is_MOCK_id'
 
     expected_query = (
-        f'MATCH (: {Labels.Application})-[: {Relations.has_cloud_object}]->'
-        f'(: {Labels.CloudObject})-[: {Relations.has_service} {{{Properties.has_id} : "{service_id}"}}]->'
-        f'(s: {Labels.ServiceType} {{{Properties.has_id} : "{service_id}"}}) WITH s MATCH (s) RETURN s')
+        f'MATCH (: {labels.Application})-[: {Relations.has_cloud_object}]->'
+        f'(: {labels.CloudObject})-[: {Relations.has_service} {{{Properties.has_id} : "{service_id}"}}]->'
+        f'(s: {labels.ServiceType} {{{Properties.has_id} : "{service_id}"}}) WITH s MATCH (s) RETURN s')
 
     actual_query1 = (QueryBuilder().match()
-                    .node(Labels.Application)
+                    .node(labels.Application)
                     .related_to(Relations.has_cloud_object)
-                    .node(Labels.CloudObject)
+                    .node(labels.CloudObject)
                     .related_to(Relations.has_service, properties={Properties.has_id: service_id})
-                    .node(Labels.ServiceType, 's', {Properties.has_id: service_id})
+                    .node(labels.ServiceType, 's', {Properties.has_id: service_id})
                     .with_('s'))
     actual_query2 = (QueryBuilder().match()
                     .node(ref_name='s')

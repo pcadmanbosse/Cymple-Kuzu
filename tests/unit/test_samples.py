@@ -4,10 +4,10 @@ from src.samples import basic
 
 rendered = {
     # Read Operations #
-    basic.get_all_nodes_by_label.__name__:
-        basic.get_all_nodes_by_label(labels='Movie', node_name='n'),
-    basic.get_all_nodes_by_label_and_properties.__name__:
-        basic.get_all_nodes_by_label_and_properties(labels='Movie', properties={'name': 'The Matrix'}, node_name='n'),
+    basic.get_all_nodes_by_labels.__name__:
+        basic.get_all_nodes_by_labels(labels='Movie', node_name='n'),
+    basic.get_all_nodes_by_labels_and_properties.__name__:
+        basic.get_all_nodes_by_labels_and_properties(labels='Movie', properties={'name': 'The Matrix'}, node_name='n'),
     basic.get_all_paths.__name__:
         basic.get_all_paths(src_node_labels='Movie', dst_node_labels='Director',
                             relationship_type='has_directed', path_name='path'),
@@ -29,9 +29,9 @@ rendered = {
 }
 
 expected = {
-    basic.get_all_nodes_by_label.__name__:
+    basic.get_all_nodes_by_labels.__name__:
         'MATCH (n: Movie) RETURN n',
-    basic.get_all_nodes_by_label_and_properties.__name__:
+    basic.get_all_nodes_by_labels_and_properties.__name__:
         'MATCH (n: Movie {name : "The Matrix"}) RETURN n',
     basic.get_all_paths.__name__:
         'MATCH path = ( (: Movie)-[: has_directed]-(: Director) ) RETURN path',

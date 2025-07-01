@@ -4,7 +4,7 @@ from cymple.builder import QueryBuilder
 
 
 
-def get_all_nodes_by_label(labels: Union[List[str], str], node_name: str = 'n'):
+def get_all_nodes_by_labels(labels: Union[List[str], str], node_name: str = 'n'):
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name)
@@ -12,7 +12,7 @@ def get_all_nodes_by_label(labels: Union[List[str], str], node_name: str = 'n'):
             )
 
 
-def get_all_nodes_by_label_and_properties(labels: Union[List[str], str], properties: Dict[str, Any], node_name: str = 'n'):
+def get_all_nodes_by_labels_and_properties(labels: Union[List[str], str], properties: Dict[str, Any], node_name: str = 'n'):
     return (QueryBuilder()
             .match()
             .node(labels=labels, ref_name=node_name, properties=properties)
@@ -25,7 +25,7 @@ def get_all_paths(src_node_labels: Union[List[str], str], dst_node_labels: Union
             .match()
             .operator_start(operator='', ref_name=path_name)
             .node(labels=src_node_labels)
-            .related(label=relationship_type)
+            .related(labels=relationship_type)
             .node(labels=dst_node_labels)
             .operator_end()
             .return_literal(literal=path_name)
@@ -36,7 +36,7 @@ def get_all_nodes_related_to_nodes(src_node_labels: Union[List[str], str], dst_n
     return (QueryBuilder()
             .match()
             .node(labels=src_node_labels)
-            .related(label=relationship_type)
+            .related(labels=relationship_type)
             .node(labels=dst_node_labels, ref_name=dst_node_name)
             .return_literal(literal=dst_node_name)
             )
@@ -90,6 +90,6 @@ def merge_relationship(relationship_type: str, properties: Dict[str, Any] = None
             .node(labels=dst_node_labels, properties=dst_node_properties, ref_name='dst')
             .merge()
             .node(ref_name='src')
-            .related_to(label=relationship_type, properties=properties)
+            .related_to(labels=relationship_type, properties=properties)
             .node(ref_name='dst')
             )

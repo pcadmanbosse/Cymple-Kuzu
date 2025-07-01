@@ -264,9 +264,9 @@ class Node(Query):
     """A class for representing a "NODE" clause."""
 
     def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
-        """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
+        """Concatenate a graph Node, which may be filtered using any labels/s and/or property/properties.
         
-        :param labels: The label (or list of labels) for that node, defaults to None
+        :param labels: The labels(or list of labels) for that node, defaults to None
         :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -311,9 +311,9 @@ class NodeAfterMerge(Query):
     """A class for representing a "NODE AFTER MERGE" clause."""
 
     def node(self, labels: Union[List[str], str] = None, ref_name: str = None, properties: dict = None, **kwargs):
-        """Concatenate a graph Node, which may be filtered using any label/s and/or property/properties.
+        """Concatenate a graph Node, which may be filtered using any labels/s and/or property/properties.
         
-        :param labels: The label (or list of labels) for that node, defaults to None
+        :param labels: The labels(or list of labels) for that node, defaults to None
         :type labels: Union[List[str], str]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
@@ -461,11 +461,11 @@ class Procedure(Query):
 class Relation(Query):
     """A class for representing a "RELATION" clause."""
 
-    def related(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related(self, labels: Union[str, List[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, List[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -484,13 +484,13 @@ class Relation(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_to(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related_to(self, labels: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, List[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -509,13 +509,13 @@ class Relation(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_from(self, label: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related_from(self, labels: Union[str, List[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, List[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -534,15 +534,15 @@ class Relation(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def _directed_relation(self, direction: str, label: Union[str, List[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def _directed_relation(self, direction: str, labels: Union[str, List[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a graph Relationship (private method).
         
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
         :type direction: str
-        :param label: The relationship label (type or types) in the DB
-        :type label: Union[str, List[str]]
+        :param labels: The relationship labels(type or types) in the DB
+        :type labels: Union[str, List[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -564,10 +564,10 @@ class Relation(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
     
-        if isinstance(label, list):
-            relation_type = "|".join([f':{l}' for l in label])
+        if isinstance(labels, list):
+            relation_type = "|".join([f':{l}' for l in labels])
         else:
-            relation_type = '' if label is None else f': {label}'
+            relation_type = '' if labels is None else f': {labels}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
     
@@ -602,11 +602,11 @@ class Relation(Query):
 class RelationAfterMerge(Query):
     """A class for representing a "RELATION AFTER MERGE" clause."""
 
-    def related(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related(self, labels: Union[str, list[str]] = None, ref_name: str = None, properties: dict = None, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate an undirectional (i.e. --) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, list[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -625,13 +625,13 @@ class RelationAfterMerge(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('none', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('none', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_to(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related_to(self, labels: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a forward (i.e. -->) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, list[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -650,13 +650,13 @@ class RelationAfterMerge(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('forward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('forward', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def related_from(self, label: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def related_from(self, labels: Union[str, list[str]] = None, ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a backward (i.e. <--) graph Relationship, which may be filtered.
         
-        :param label: The relationship label (type or types) in the DB, defaults to None
-        :type label: Union[str, list[str]]
+        :param labels: The relationship labels(type or types) in the DB, defaults to None
+        :type labels: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -675,15 +675,15 @@ class RelationAfterMerge(Query):
         :return: A Query object with a query that contains the new clause.
         :rtype: RelationAfterMergeAvailable
         """
-        return RelationAvailable(self.query + self._directed_relation('backward', label, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
+        return RelationAvailable(self.query + self._directed_relation('backward', labels, ref_name, properties, min_hops, max_hops, shortest, **kwargs))
 
-    def _directed_relation(self, direction: str, label: Union[str, list[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
+    def _directed_relation(self, direction: str, labels: Union[str, list[str]], ref_name: str = None, properties: dict = {}, min_hops: int = 1, max_hops: int = 1, shortest: Union[bool, str] = False, **kwargs):
         """Concatenate a graph Relationship (private method).
         
         :param direction: The relationship direction, can one of 'forward', 'backward' - otherwise unidirectional
         :type direction: str
-        :param label: The relationship label (type or types) in the DB
-        :type label: Union[str, list[str]]
+        :param labels: The relationship labels(type or types) in the DB
+        :type labels: Union[str, list[str]]
         :param ref_name: A reference name to be used later in the rest of the query, defaults to None
         :type ref_name: str
         :param properties: A dict representing the set of properties by which the relationship is filtered, defaults to
@@ -705,10 +705,10 @@ class RelationAfterMerge(Query):
         min_hops_str = '' if min_hops == -1 else str(min_hops)
         max_hops_str = '' if max_hops == -1 else str(max_hops)
     
-        if isinstance(label, list):
-            relation_type = "|".join([f':{l}' for l in label])
+        if isinstance(labels, list):
+            relation_type = "|".join([f':{l}' for l in labels])
         else:
-            relation_type = '' if label is None else f': {label}'
+            relation_type = '' if labels is None else f': {labels}'
         relation_ref_name = '' if ref_name is None else f'{ref_name}'
         relation_properties = f' {{{Properties(properties).to_str(**kwargs)}}}' if properties else ''
     
