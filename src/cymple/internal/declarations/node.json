@@ -36,6 +36,7 @@
     "Set", 
     "QueryStartAvailable",
     "Merge",
-    "Remove"
+    "Remove",
+    "And"
   ] 
 }

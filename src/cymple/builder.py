@@ -75,6 +75,20 @@ class Alter(Query):
         """
         return AlterAvailable(self.query + ' ALTER')
 
+class And(Query):
+    """A class for representing a "AND" clause."""
+
+    def and_(self, **kwargs):
+        """Concatenate another clause, using a comma. E.G match (n), ...
+        
+        :param **kwargs: kwargs
+        :type **kwargs
+        
+        :return: A Query object with a query that contains the new clause.
+        :rtype: AndAvailable
+        """
+        return AndAvailable(self.query + ",")
+
 class Call(Query):
     """A class for representing a "CALL" clause."""
 
@@ -1011,6 +1025,9 @@ class AddColumnAvailable(NewQuery):
 class AlterAvailable(Table):
     """A class decorator declares a Alter is available in the current query."""
 
+class AndAvailable(Node, Path):
+    """A class decorator declares a And is available in the current query."""
+
 class CallAvailable(Procedure):
     """A class decorator declares a Call is available in the current query."""
 
@@ -1041,7 +1058,7 @@ class MergeAvailable(NodeAfterMerge, Return, OperatorStart, Union):
 class NewQueryAvailable(QueryStartAvailable):
     """A class decorator declares a NewQuery is available in the current query."""
 
-class NodeAvailable(Relation, Return, Delete, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Merge, Remove):
+class NodeAvailable(Relation, Return, Delete, Where, OperatorStart, OperatorEnd, Set, QueryStartAvailable, Merge, Remove, And):
     """A class decorator declares a Node is available in the current query."""
 
 class NodeAfterMergeAvailable(RelationAfterMerge, Return, Delete, OperatorStart, OperatorEnd, SetAfterMerge, OnCreate, OnMatch, QueryStartAvailable):
@@ -1107,7 +1124,7 @@ class WithAvailable(QueryStartAvailable, Unwind, Where, Set, Remove, CaseWhen, R
 class YieldAvailable(QueryStartAvailable, Node, Where, Return):
     """A class decorator declares a Yield is available in the current query."""
 
-class AnyAvailable(AddColumn, Alter, Call, Case, CaseWhen, Create, Delete, DropColumn, Limit, Match, Merge, NewQuery, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Path, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Table, Union, Unwind, Where, With, Yield):
+class AnyAvailable(AddColumn, Alter, And, Call, Case, CaseWhen, Create, Delete, DropColumn, Limit, Match, Merge, NewQuery, Node, NodeAfterMerge, OnCreate, OnMatch, OperatorEnd, OperatorStart, OrderBy, Path, Procedure, QueryStart, Relation, RelationAfterMerge, Remove, Return, Set, SetAfterMerge, Skip, Table, Union, Unwind, Where, With, Yield):
     """A class decorator declares anything is available in the current query."""
 
 class QueryBuilder(QueryStartAvailable):

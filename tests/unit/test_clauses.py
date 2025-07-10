@@ -5,6 +5,7 @@ qb = QueryBuilder()
 
 rendered = {
     '_RESET_': qb.reset(),
+    'AND': qb.reset().match().node(ref_name="a").related_to(ref_name="b").node(ref_name="c").and_().node(ref_name="a").related_to(ref_name="e").node(ref_name='f'),
     'ALTER TABLE (add)': qb.reset().alter().table(name="TABLE").add_column(name="bool_col", type="BOOL", primary_key=True, default_value="True"),
     'ALTER TABLE (add simple)': qb.reset().alter().table(name="TABLE").add_column(name="simple", type="STRING", if_not_exists=False),
     'ALTER TABLE (drop)': qb.reset().alter().table(name="TABLE").drop_column(name="bool_col"),
@@ -82,6 +83,7 @@ rendered = {
 
 expected = {
     '_RESET_': '',
+    'AND': 'MATCH (a)-[b]->(c), (a)-[e]->(f)',
     'ALTER TABLE (add)': "ALTER TABLE TABLE ADD IF NOT EXISTS bool_col BOOL DEFAULT True PRIMARY KEY",
     'ALTER TABLE (add simple)': "ALTER TABLE TABLE ADD simple STRING",
     'ALTER TABLE (drop)': "ALTER TABLE TABLE DROP IF EXISTS bool_col",

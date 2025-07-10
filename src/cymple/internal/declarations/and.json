@@ -1,0 +1,18 @@
+{
+    "clause_name": "AND",
+    "methods": [
+      {
+        "name": "and_",
+        "docstring_summary": "Concatenate another clause, using a comma. E.G match (n), ...",
+        "args": {
+          "**kwargs": {
+            "description": "kwargs"
+          }
+        }
+      }
+    ],
+    "successors": [
+        "Node",
+        "Path"
+      ]
+  }
